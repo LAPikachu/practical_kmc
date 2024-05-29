@@ -12,7 +12,7 @@
 
 \Large WW8: Materials Simulation
 
-\LARGE \textbf{Practical: KMC}
+\LARGE \textbf{Practical: Kinetic Monte Carlo Simulation}
 
 
 
@@ -21,7 +21,7 @@
 
 
 
-\Large \textbf{Supervision: }
+\Large \textbf{Supervision: Dr. Frank Wendler}
 \end{center}
 
 \thispagestyle{empty}
@@ -30,9 +30,24 @@
 %
 
 \setcounter{page}{1}
-
 \tableofcontents
 \newpage
+
+\section{Introduction}
+The Monte Carlo method broadly refers to a large toolset of modelling methods utilizing the generation random numbers to solve problems. The underlying algorithm is the Metropolis algorithm. As opposed to Molecular Dynamics Monte Carlo methods do not follow the simulated particles trajectories over, but randomly perturbed the system to asses the the resulting systems properties in comparison to the preceding system. The  \textit{Kinetic Monte Carlo} (KMC) method incorporates kinetic features to the simulation. Each transition from state to state is seen is a diffusive jump and can happen at time-scales larger than in Molecular Dynamics (which is limited by the time-scale of atomic vibrations) \cite{voter2007}. 
+
+
+\subsection{General Algorithm of the KMC Method}
+
+We start with a system of possible states \(i\) and possible transitions \(i \rightarrow j\). The transition rate is \(\nu_{ij}\)
+
+\begin{enumerate}
+	\item start with state \(i\) at time \(t\)
+	\item evaluate total jump rate \( \Gamma = \sum\limits_{j}\nu_{ij}\)
+	\item evaluate probability of jump by comparing to total jump rate \( p_{j} = \frac{\nu_{ij}}{\Gamma}\) and cumulative jump probabilities \( P_{j}= \sum\limits_{j'<j}p_{ij'}\)
+	\item generate a random number \(R_{1} \in [0,1)\)
+	\item 
+\end{enumerate} 
 
 %\listoffigures
 \printbibliography

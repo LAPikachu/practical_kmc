@@ -82,7 +82,7 @@
       <file>main.bcf</file>
     </requires>
     <requires type="editable">
-      <file>ddd_bib.bib</file>
+      <file>kmc_practical.bib</file>
     </requires>
   </external>
 </requests>
