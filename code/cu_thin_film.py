@@ -111,13 +111,21 @@ def kmc_sim(TotalTime, initial_concentration, cu_thickness, al_concentration, in
 
     while jumps >0:
         al_atoms_df = get_dataframe_with_jump_rates(lattice)
+        top_sites = al_atoms_df.nlargest(1, 'no_jump_sites', keep='all') 
+        jump_site = top_sites.sample(1)
+        jump_from = jump_site['coordinates'].values
+        jump_to_list = jump_site['jump_sites_coordinates'].values
+        jump_to = random.choice(jump_to_list)
+        lattice[jump_from[0][0],jump_from[0][1]] = 0
+        lattice[jump_to[0][0],jump_to[0][1]] = 1
+        jumps -=1
     
 
 
 
             
     # update time
-    t_ij = -np.log(random.uniform(0, 1)) / np.sum(k_cu_mat)
+    t_ij = -np.log(random.uniform(0, 1)) / (total_possible_jump_sites*jump_rate)
     t += t_ij
     vT = R * T  
     T += vT * t_ij
