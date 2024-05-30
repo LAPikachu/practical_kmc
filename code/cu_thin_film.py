@@ -77,39 +77,38 @@ def kmc_diff_sim(TotalTime, initial_concentration, cu_thickness, al_concentratio
             surroundings = get_coordinates_of_nearby_type(lattice, row, col, type=1)
             number_cu_neighbor[j] = neighbor_number - len(surroundings)
         
-        # Berechne Sprungraten für Cu-Atome
+        # jump rates
         k_cu = diffusion_coefficient_cu(current_temperature)
         k_cu_mat = number_cu_neighbor * k_cu
         
-        # Führe Diffusion oder Rückkehr für jedes Cu-Atom durch
+        # loop over Cu atoms and check if they jump back or diffuse
         for j, (row, col) in enumerate(cu_coordinates):
-            # Berechne Sprungraten für Diffusion und Rückkehr
             k_diffusion = k_cu_mat[j]
             k_reversion = neighbor_number * diffusion_coefficient_cu(current_temperature)
             r_diffusion = random.uniform(0, 1)
             r_reversion = random.uniform(0, 1)
             
-            # Überprüfe, ob das aktuelle Cu-Atom diffundiert
+            # check if Cu atom diffuses or reverts
             if r_diffusion < k_diffusion / (k_diffusion + k_reversion):
                 jump_direction = random.choice([(1, 0), (-1, 0), (0, 1), (0, -1)])
                 new_position = ((row + jump_direction[0]) % 10, (col + jump_direction[1]) % 10)
                 
-                lattice[row, col] = 'Al'
-                lattice[new_position] = 'Cu'
-                # Aktualisiere die Konzentration nur für das diffundierte Atom
+                lattice[row, col] = 1
+                lattice[new_position] = 0
+                # update concentration
                 current_concentration_cu[i+1] = current_concentration_cu[i]
             elif r_reversion < k_reversion / (k_diffusion + k_reversion):
                 lattice[row, col] = 'Al'
                 # Aktualisiere die Konzentration für Nicht-Schritte
                 current_concentration_cu[i+1] = current_concentration_cu[i] + 0.01
         
-        # Zeit und Temperatur aktualisieren
-        tij = -np.log(random.uniform(0, 1)) / np.sum(k_cu_mat)
-        t += tij
-        vT = R * T  # vT hier berechnen
-        T += vT * tij
+        # update time
+        t_ij = -np.log(random.uniform(0, 1)) / np.sum(k_cu_mat)
+        t += t_ij
+        vT = R * T  
+        T += vT * t_ij
         
-        # Temperatur aktualisieren
+        # update temperature
         current_temperature = initial_temperature + (end_temperature - initial_temperature) * (current_time / TotalTime)
         current_time += delta_t
     
@@ -117,15 +116,13 @@ def kmc_diff_sim(TotalTime, initial_concentration, cu_thickness, al_concentratio
     return time, current_concentration_cu
 
 
-# Simulation durchführen
-time, concentration_cu = kmc_diff_sim(TotalTime, initial_concentration, cu_thickness, al_concentration, initial_temperature, end_temperature, num_steps)
+if __name__ == '__main__':
+    time, concentration_cu = kmc_diff_sim(TotalTime, initial_concentration, cu_thickness, al_concentration, initial_temperature, end_temperature, num_steps)
 
-# Ergebnisse plotten
-plt.figure(figsize=(10, 6))
-plt.plot(time, concentration_cu, color='blue', linestyle='-', label='Cu-Konzentration in CuAl-Dünnschicht')
-plt.axhline(y=initial_concentration * 100, color='red', linestyle='--', label='Anfangskonzentration Cu')
-plt.xlabel('Zeit (s)')
-plt.ylabel('Cu-Konzentration (%)')
-plt.title('Entwicklung der Kupferkonzentration in CuAl-Dünnschicht')
-plt.legend()
-plt.show()
+    # Ergebnisse plotten
+    plt.figure(figsize=(10, 6))
+    plt.plot(time, concentration_cu, color='pink', linestyle='x', label='Cu concentration')
+    plt.axhline(y=initial_concentration * 100, color='red', linestyle='--', label='Anfangskonzentration Cu')
+    plt.title('Entwicklung der Kupferkonzentration in CuAl-Dünnschicht')
+    plt.legend()
+    plt.show()
