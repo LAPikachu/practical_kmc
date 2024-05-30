@@ -54,6 +54,25 @@ def get_coordinates_atoms_type(grid, type = 1):
                 coordinates.append((i, j))
     return coordinates
 
+def get_dataframe_with_jump_rates(lattice):
+    al_coordinates = get_coordinates_atoms_type(lattice, type=1)
+    possible_jump_sites = []
+    no_possible_jump_sites = []
+    for atom_coordinates in al_coordinates:
+        row, col = atom_coordinates
+        current_possible_jump_sites = get_coordinates_of_neighbor_type(lattice, row, col, type=0)
+        no_possible_jump_sites.append(len(current_possible_jump_sites))
+        possible_jump_sites.append(current_possible_jump_sites)
+    
+    total_possible_jump_sites = sum(no_possible_jump_sites)
+
+    al_atoms_dict = {'coordinates':al_coordinates ,
+                     'jump_sites_coordinates': possible_jump_sites, 
+                     'no_jump_sites': no_possible_jump_sites}    
+    al_atoms_df = pd.DataFrame(al_atoms_dict)
+    return al_atoms_df
+
+
 def kmc_sim(TotalTime, initial_concentration, cu_thickness, al_concentration, initial_temperature, end_temperature, num_steps=1000):
     current_time = 0
     T = initial_temperature
@@ -67,16 +86,31 @@ def kmc_sim(TotalTime, initial_concentration, cu_thickness, al_concentration, in
     #plt.show()
     
     neighbor_number = 4  # for 2D
-    al_coordinates = get_coordinates_atoms_type(lattice, type=1)
-    possible_jump_sites = []
-    no_possible_jump_sites = []
-    for atom_coordinates in al_coordinates:
-        row, col = atom_coordinates
-        current_possible_jump_sites = get_coordinates_of_neighbor_type(lattice, row, col, type=0)
-        no_possible_jump_sites.append(len(current_possible_jump_sites))
-        possible_jump_sites.append(current_possible_jump_sites)
+
+    al_atoms_df = get_dataframe_with_jump_rates(lattice)
+
+    total_possible_jump_sites = al_atoms_df['no_jump_sites'].sum()
+
+    jump_rate = 4*diffusion_coefficient_cu(T) / distance**2
+
+    random_nr_1 = random.uniform(0, 1)
+
+    jumps = total_possible_jump_sites * random_nr_1
     
-    total_possible_jump_sites = sum(no_possible_jump_sites)    
+
+
+    
+    top_sites = al_atoms_df.nlargest(1, 'no_jump_sites', keep='all') 
+    jump_site = top_sites.sample(1)
+    jump_from = jump_site['coordinates'].values
+    jump_to_list = jump_site['jump_sites_coordinates'].values
+    jump_to = random.choice(jump_to_list)
+    lattice[jump_from[0][0],jump_from[0][1]] = 0
+    lattice[jump_to[0][0],jump_to[0][1]] = 1
+    jumps -=1
+
+    while jumps >0:
+        al_atoms_df = get_dataframe_with_jump_rates(lattice)
     
 
 
