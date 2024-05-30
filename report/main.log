@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2024.2.5)  29 MAY 2024 13:09
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2024.2.5)  30 MAY 2024 16:39
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2194,18 +2194,31 @@ been already used, duplicate ignored
 <to be read again> 
                    \relax 
 l.34 \newpage
-              [1]
+              [1] [2{C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/enc/dvip
+s/lm/lm-mathit.enc}{C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/enc/dvips
+/mnsymbol/MnSymbolA.enc}{C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/enc/
+dvips/lm/lm-rm.enc}{C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/enc/dvips
+/mnsymbol/MnSymbolD.enc}{C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/enc/
+dvips/mnsymbol/MnSymbolF.enc}{C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts
+/enc/dvips/mnsymbol/MnSymbolC.enc}{C:/Users/Leon/AppData/Local/Programs/MiKTeX/
+fonts/enc/dvips/mnsymbol/MnSymbolE.enc}]
+
+LaTeX Warning: Command \r invalid in math mode on input line 92.
+
 Package microtype Info: Character `029' is missing
 (microtype)             in font `T1/lmr/m/sc/10.95'.
 (microtype)             Ignoring protrusion settings for this character.
- [2{C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathit.en
-c}{C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/mnsymbol/MnSymbo
-lA.enc}{C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-rm.en
-c}{C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/mnsymbol/MnSymbo
-lD.enc}{C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/mnsymbol/Mn
-SymbolF.enc}{C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/mnsymb
-ol/MnSymbolC.enc}{C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/m
-nsymbol/MnSymbolE.enc}] (main.aux)
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 9
+5.
+(C:\Users\Leon\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmtt.fd
+File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `lmtt' (encoding: T1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+ [3]
+[4] (main.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
@@ -2217,11 +2230,11 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 45558 strings out of 474542
- 899366 string characters out of 5744919
- 1935978 words of memory out of 5000000
- 67031 multiletter control sequences out of 15000+600000
- 618975 words of font info for 123 fonts, out of 8000000 for 9000
+ 45658 strings out of 474542
+ 901110 string characters out of 5744919
+ 1938978 words of memory out of 5000000
+ 67099 multiletter control sequences out of 15000+600000
+ 619727 words of font info for 129 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  113i,19n,110p,11002b,2108s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/type1/public/mnsymbol/MnSy
@@ -2232,17 +2245,17 @@ ype1/public/lm/lmbx12.pfb><C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/ty
 pe1/public/lm/lmcsc10.pfb><C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/ty
 pe1/public/lm/lmcsco10.pfb><C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/t
 ype1/public/lm/lmmi10.pfb><C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/ty
-pe1/public/lm/lmmi6.pfb><C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/type
-1/public/lm/lmmi8.pfb><C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/type1/
-public/lm/lmr10.pfb><C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/type1/pu
-blic/lm/lmr12.pfb><C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/type1/publ
-ic/lm/lmr17.pfb><C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/type1/public
-/lm/lmr8.pfb><C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm
-/lmri10.pfb><C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/
-lmssbx10.pfb>
-Output written on main.pdf (3 pages, 317726 bytes).
+pe1/public/lm/lmmi8.pfb><C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/type
+1/public/lm/lmr10.pfb><C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/type1/
+public/lm/lmr12.pfb><C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/type1/pu
+blic/lm/lmr17.pfb><C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/type1/publ
+ic/lm/lmr8.pfb><C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/type1/public/
+lm/lmri10.pfb><C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/type1/public/l
+m/lmssbx10.pfb><C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/type1/public/
+lm/lmtt10.pfb>
+Output written on main.pdf (5 pages, 366902 bytes).
 PDF statistics:
- 146 PDF objects out of 1000 (max. 8388607)
- 13 named destinations out of 1000 (max. 500000)
- 32802 words of extra memory for PDF output out of 35830 (max. 10000000)
+ 195 PDF objects out of 1000 (max. 8388607)
+ 31 named destinations out of 1000 (max. 500000)
+ 33330 words of extra memory for PDF output out of 35830 (max. 10000000)
 

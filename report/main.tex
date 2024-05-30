@@ -37,17 +37,71 @@
 The Monte Carlo method broadly refers to a large toolset of modelling methods utilizing the generation random numbers to solve problems. The underlying algorithm is the Metropolis algorithm. As opposed to Molecular Dynamics Monte Carlo methods do not follow the simulated particles trajectories over, but randomly perturbed the system to asses the the resulting systems properties in comparison to the preceding system. The  \textit{Kinetic Monte Carlo} (KMC) method incorporates kinetic features to the simulation. Each transition from state to state is seen is a diffusive jump and can happen at time-scales larger than in Molecular Dynamics (which is limited by the time-scale of atomic vibrations) \cite{voter2007}. 
 
 
-\subsection{General Algorithm of the KMC Method}
+\subsection{General Algorithm of the rejection free KMC Method}\label{sec:general_kmc_algorithm}
 
-We start with a system of possible states \(i\) and possible transitions \(i \rightarrow j\). The transition rate is \(\nu_{ij}\)
+We start with a system of possible states \(i\) and possible transitions \(i \rightarrow j\). The transition rate is \(\nu_{ij}\). The following algorithm is reproduced from the problem statement \cite{zaiserb}.
 
 \begin{enumerate}
 	\item start with state \(i\) at time \(t\)
-	\item evaluate total jump rate \( \Gamma = \sum\limits_{j}\nu_{ij}\)
-	\item evaluate probability of jump by comparing to total jump rate \( p_{j} = \frac{\nu_{ij}}{\Gamma}\) and cumulative jump probabilities \( P_{j}= \sum\limits_{j'<j}p_{ij'}\)
+	\item evaluate total jump rate $\Gamma$ \begin{equation}
+		\Gamma = \sum\limits_{j}\nu_{ij} \label{eq:total_jump_rate}
+	\end{equation} 
+	\item evaluate probability of jump by comparing \( \nu_{ij} \) to the total jump rate (eq. \ref{eq:jump_probability}) and calculate the cumulative probability \ref{eq:cumulative_probabilities} 
+	\begin{subequations}
+		\begin{align}
+			p_{j} & = \frac{\nu_{ij}}{\Gamma} \label{eq:jump_probability} \\
+			 P_{j }&= \sum\limits_{j'<j}p_{ij'} \label{eq:cumulative_probabilities}
+		\end{align}
+	\end{subequations} 
 	\item generate a random number \(R_{1} \in [0,1)\)
-	\item 
+	\item chose state which satisfies \( P_{ij} = \mathrm{min}{P_{il}, P_{il} > R_{1}}\) (where \(P_{il}\) is a list ordered in descending order, to make sure that high probability steps are more likely to be executed)
+	\item generate random number \(R_{2} \in [0,1)\) and calculate jump time \(t_{ij}\) as
+	\begin{equation}
+		t_{ij} = - \frac{\ln(R_{2})}{\Gamma}
+	\end{equation}
+	\item update system configuration: \(i \rightarrow j\) and update time \(t = t + t_ij\)
+	\item restart loop
+
 \end{enumerate} 
+
+\section{Diffusion Problems Solved with KMC}
+\subsection{Diffusion in a Cu thin film with time dependent diffusion rate}
+In this task we consider a sandwich structure of a Cu film and a Cu-10\% Al film, both of thickness 100~nm. As Cu is an fcc-metal it is possible to simplify the set-up to a 2D simple cubic lattice. The diffusion coefficient is given as:
+\begin{equation}
+	D = 1.49 \cdot 10^{-7} \exp \bigl( - \frac{136.1 \mathrm{kJ}}{\mathrm{R T}}   \bigr) \frac{\mathrm{m}^{2}}{\mathrm{s}}
+\end{equation}
+
+In 3D-the jump rate for e.g. Carbon at octahedral interstitial sites in $\alpha$-iron is given as \cite{gottstein2004}:
+
+\begin{equation}
+	\nu_{ij} = \frac{6D}{b^{2}}
+\end{equation}
+
+so for a 2D-simple cubic with 4 possible moving directions it should be given as:
+
+\begin{equation}
+	\nu_{ij} = \frac{6D}{b^{2}}
+\end{equation}
+
+The jump rate \(\nu_{ij}\) can be derived from D as follows:
+
+\begin{equation}
+	\nu_{ij} = \frac{4D}{b^{2}}
+\end{equation}
+
+with \(b = 2.54 \AA \). As we are considering only one kind of diffusion process \(\nu_{ij}\) is the same for all jumps so eq. \ref{eq:total_jump_rate} simplifies to:
+
+\begin{equation}
+	\Gamma = n \nu_{ij}
+\end{equation}
+
+and the probability from eq. \ref{eq:jump_probability} simplifies as stated below:
+
+\begin{equation}
+	p_{ij} = \frac{\nu_{ij}}{\Gamma} = \frac{1}{n}
+\end{equation}
+
+where \(n\) is the number of jumps.
 
 %\listoffigures
 \printbibliography

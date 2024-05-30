@@ -76,6 +76,82 @@
       \endverb
       \keyw{Kinetic Monte Carlo,Kinetic Monte Carlo Simulation,Saddle Point,Transition State Theory}
     \endentry
+    \entry{zaiserb}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=42a9d3f2abfc30a0daf5677cf3a50caf}{%
+           family={Zaiser},
+           familyi={Z\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{42a9d3f2abfc30a0daf5677cf3a50caf}
+      \strng{fullhash}{42a9d3f2abfc30a0daf5677cf3a50caf}
+      \strng{bibnamehash}{42a9d3f2abfc30a0daf5677cf3a50caf}
+      \strng{authorbibnamehash}{42a9d3f2abfc30a0daf5677cf3a50caf}
+      \strng{authornamehash}{42a9d3f2abfc30a0daf5677cf3a50caf}
+      \strng{authorfullhash}{42a9d3f2abfc30a0daf5677cf3a50caf}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Kinetic {{Monte Carlo Simulation}} - {{Problem Statement}}}
+    \endentry
+    \entry{gottstein2004}{incollection}{}
+      \name{author}{1}{}{%
+        {{hash=388b70de2746e01e8ac2ba16a146715e}{%
+           family={Gottstein},
+           familyi={G\bibinitperiod},
+           given={Günter},
+           giveni={G\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=388b70de2746e01e8ac2ba16a146715e}{%
+           family={Gottstein},
+           familyi={G\bibinitperiod},
+           given={Günter},
+           giveni={G\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Berlin, Heidelberg}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{388b70de2746e01e8ac2ba16a146715e}
+      \strng{fullhash}{388b70de2746e01e8ac2ba16a146715e}
+      \strng{bibnamehash}{388b70de2746e01e8ac2ba16a146715e}
+      \strng{authorbibnamehash}{388b70de2746e01e8ac2ba16a146715e}
+      \strng{authornamehash}{388b70de2746e01e8ac2ba16a146715e}
+      \strng{authorfullhash}{388b70de2746e01e8ac2ba16a146715e}
+      \strng{editorbibnamehash}{388b70de2746e01e8ac2ba16a146715e}
+      \strng{editornamehash}{388b70de2746e01e8ac2ba16a146715e}
+      \strng{editorfullhash}{388b70de2746e01e8ac2ba16a146715e}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Physical {{Foundations}} of {{Materials Science}}}
+      \field{isbn}{978-3-662-09291-0}
+      \field{langid}{english}
+      \field{title}{Diffusion}
+      \field{urlday}{30}
+      \field{urlmonth}{5}
+      \field{urlyear}{2024}
+      \field{year}{2004}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{155\bibrangedash 196}
+      \range{pages}{42}
+      \verb{doi}
+      \verb 10.1007/978-3-662-09291-0_6
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1007/978-3-662-09291-0_6
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1007/978-3-662-09291-0_6
+      \endverb
+    \endentry
   \enddatalist
 \endrefsection
 \endinput
