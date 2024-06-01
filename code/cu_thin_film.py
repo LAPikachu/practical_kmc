@@ -3,14 +3,13 @@ import matplotlib.pyplot as plt
 import random
 import seaborn as sns
 import pandas as pd
-import json
 
 # constants
 diff_coeff = 1.49e-7  # diffusion coefficient
 ActivationEnergy_Cu = 134.5e3  
 distance = 2.54e-10 
 R = 8.314  # general gas constant J/(mol*K)
-cu_thickness = 100e-9  
+cu_thickness = 254e-10  
 
 number_of_atoms_in_y = cu_thickness / distance 
 
@@ -63,24 +62,48 @@ def get_dataframe_with_jump_rates(lattice):
     al_coordinates = get_coordinates_atoms_type(lattice, type=1)
     possible_jump_sites = []
     no_possible_jump_sites = []
-    for atom_coordinates in al_coordinates:
+    atom_ids = []
+    for id, atom_coordinates in enumerate(al_coordinates):
+        atom_ids.append(id) 
         row, col = atom_coordinates
         current_possible_jump_sites = get_coordinates_of_neighbor_type(lattice, row, col, type=0)
         no_possible_jump_sites.append(len(current_possible_jump_sites))
         possible_jump_sites.append(current_possible_jump_sites)
     
-    total_possible_jump_sites = sum(no_possible_jump_sites)
-
-    al_atoms_dict = {'coordinates':al_coordinates ,
+    al_atoms_dict = {'atom_id': atom_ids, 
+                     'coordinates':al_coordinates ,
                      'jump_sites_coordinates': possible_jump_sites, 
                      'no_jump_sites': no_possible_jump_sites}    
     al_atoms_df = pd.DataFrame(al_atoms_dict)
     return al_atoms_df
 
+def update_dataframe(al_atoms_df, jump_to_coordinates):
+    i, j = jump_to_coordinates
+    indexes_to_update = al_atoms_df[al_atoms_df['coordinates'].apply(lambda x: (i, j) in x)].index
+    return al_atoms_df
+
+
+def update_after_jump(lattice, al_atoms_df, jump_from_coordinates, jump_to_coordinates_list):
+    jump_to_coordinates = random.choice(jump_to_coordinates_list)
+    if lattice[jump_to_coordinates[0][0],jump_to_coordinates[0][1]] == 0:
+        al_atoms_df = update_dataframe(al_atoms_df, jump_to_coordinates)
+        lattice[jump_from_coordinates[0][0],jump_from_coordinates[0][1]] = 0
+        lattice[jump_to_coordinates[0][0],jump_to_coordinates[0][1]] = 1
+        return lattice, al_atoms_df
+    else:
+        jump_to_coordinates_list.remove(jump_to_coordinates)
+
+
+        
 def make_jumps(lattice, al_atoms_df, jumps):
-        jump_sites = al_atoms_df[al_atoms_df['no_jump_sites'] > 0] # only jump sites with possible jumps
-        jump_site = jump_sites.sample(1) # choose a random jump site
-        jump_from = jump_site['coordinates'].values
+        jump_from = al_atoms_df[al_atoms_df['no_jump_sites'] > 0].sample(jumps) # only jump sites with possible jumps
+        for jump_from_i in jump_from.iterrows():
+            jump_from_coordinates= jump_from_i['coordinates'].values
+            jump_to_coordinates_list = jump_from_i['jump_sites_coordinates'].values
+            lattice, al_atoms_df = update_after_jump(lattice, al_atoms_df, jump_from_coordinates, jump_to_coordinates_list)
+
+        jump_site = jump_from.sample(1) # choose a random jump site
+        jump_from_coordinates = jump_site['coordinates'].values
         jump_to_list = jump_site['jump_sites_coordinates'].values
         jump_to = random.choice(jump_to_list)
         lattice[jump_from[0][0],jump_from[0][1]] = 0
@@ -104,7 +127,7 @@ def kmc_sim(time ,total_time, temperature, end_temperature, lattice, num_steps=1
 
     random_nr_1 = random.uniform(0, 1)
 
-    jumps = total_possible_jump_sites * random_nr_1
+    jumps = int(total_possible_jump_sites * random_nr_1
 
     lattice, jumps = make_jumps(lattice, al_atoms_df, jumps) # first jump
     
