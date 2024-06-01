@@ -3,24 +3,29 @@ import matplotlib.pyplot as plt
 import random
 import seaborn as sns
 import pandas as pd
-
-# parameters
-grid_dim_y = 4
-grid_dim_x = 4
-TotalTime = 10 
-initial_concentration = 0.1  
-cu_thickness = 100e-9  
-al_concentration = 0.9  
-initial_temperature = T = 298 
-end_temperature = 600  
-num_steps = 1000  
-t = 0 
+import json
 
 # constants
 diff_coeff = 1.49e-7  # diffusion coefficient
 ActivationEnergy_Cu = 134.5e3  
 distance = 2.54e-10 
 R = 8.314  # general gas constant J/(mol*K)
+cu_thickness = 100e-9  
+
+number_of_atoms_in_y = cu_thickness / distance 
+
+# parameters
+grid_dim_y = int(number_of_atoms_in_y)
+grid_dim_x = grid_dim_y // 10
+total_time = 10 
+initial_concentration = 0.1  
+al_concentration = 0.1  
+initial_temperature = 298 
+end_temperature = 600  
+num_steps = 100
+time = 0 
+
+
 
 def diffusion_coefficient_cu(temperature):
     return diff_coeff * np.exp(-ActivationEnergy_Cu / (R * temperature))
@@ -72,79 +77,81 @@ def get_dataframe_with_jump_rates(lattice):
     al_atoms_df = pd.DataFrame(al_atoms_dict)
     return al_atoms_df
 
-
-def kmc_sim(TotalTime, initial_concentration, cu_thickness, al_concentration, initial_temperature, end_temperature, num_steps=1000):
-    current_time = 0
-    T = initial_temperature
-    current_temperature = initial_temperature
-    
-    # Generate CuAl grid
-    lattice =  np.zeros((grid_dim_y,grid_dim_x)) #generate_cu_al_grid(al_concentration) # 0: Cu, 1: Al
-    lattice[:grid_dim_y//2,:] = 1
-    fig, ax = plt.subplots(figsize=(6, 6))
-    #sns.heatmap(lattice, cmap='Blues' , cbar=False, square=True, ax=ax, yticklabels=True, xticklabels=True)
-    #plt.show()
-    
-    neighbor_number = 4  # for 2D
-
-    al_atoms_df = get_dataframe_with_jump_rates(lattice)
-
-    total_possible_jump_sites = al_atoms_df['no_jump_sites'].sum()
-
-    jump_rate = 4*diffusion_coefficient_cu(T) / distance**2
-
-    random_nr_1 = random.uniform(0, 1)
-
-    jumps = total_possible_jump_sites * random_nr_1
-    
-
-
-    
-    top_sites = al_atoms_df.nlargest(1, 'no_jump_sites', keep='all') 
-    jump_site = top_sites.sample(1)
-    jump_from = jump_site['coordinates'].values
-    jump_to_list = jump_site['jump_sites_coordinates'].values
-    jump_to = random.choice(jump_to_list)
-    lattice[jump_from[0][0],jump_from[0][1]] = 0
-    lattice[jump_to[0][0],jump_to[0][1]] = 1
-    jumps -=1
-
-    while jumps >0:
-        al_atoms_df = get_dataframe_with_jump_rates(lattice)
-        top_sites = al_atoms_df.nlargest(1, 'no_jump_sites', keep='all') 
-        jump_site = top_sites.sample(1)
+def make_jumps(lattice, al_atoms_df, jumps):
+        jump_sites = al_atoms_df[al_atoms_df['no_jump_sites'] > 0] # only jump sites with possible jumps
+        jump_site = jump_sites.sample(1) # choose a random jump site
         jump_from = jump_site['coordinates'].values
         jump_to_list = jump_site['jump_sites_coordinates'].values
         jump_to = random.choice(jump_to_list)
         lattice[jump_from[0][0],jump_from[0][1]] = 0
         lattice[jump_to[0][0],jump_to[0][1]] = 1
         jumps -=1
+        return lattice, jumps
+
+
+
+def kmc_sim(time ,total_time, temperature, end_temperature, lattice, num_steps=100):
+    current_temperature = temperature
+    current_time = time
+
+    neighbor_number = 4  # for 2D
+
+    al_atoms_df = get_dataframe_with_jump_rates(lattice)
+
+    total_possible_jump_sites = al_atoms_df['no_jump_sites'].sum()
+
+    jump_rate = 4*diffusion_coefficient_cu(temperature) / distance**2
+
+    random_nr_1 = random.uniform(0, 1)
+
+    jumps = total_possible_jump_sites * random_nr_1
+
+    lattice, jumps = make_jumps(lattice, al_atoms_df, jumps) # first jump
     
+    random_nr_2 = random.uniform(0, 1)
+    t_ij = -np.log(random_nr_2) / (total_possible_jump_sites*jump_rate)
 
+    if t_ij < total_time/num_steps: # check if the time is small enough
+        current_time += t_ij 
+        jumps_executed = jumps
+        while jumps >0: # consecutive jumps
+            al_atoms_df = get_dataframe_with_jump_rates(lattice) # always update the dataaframe, not to jump a site twice
+            lattice, jumps = make_jumps(lattice, al_atoms_df, jumps) 
+            jumps -= 1
+    else: # if the time is too large, perform no jump at all
+        jumps_executed = 0
+        t_ij = total_time/num_steps     
+        current_time += t_ij
 
-
-            
-    # update time
-    t_ij = -np.log(random.uniform(0, 1)) / (total_possible_jump_sites*jump_rate)
-    t += t_ij
-    vT = R * T  
-    T += vT * t_ij
-        
     # update temperature
-    current_temperature = initial_temperature + (end_temperature - initial_temperature) * (current_time / TotalTime)
-    current_time += delta_t
+    current_temperature = end_temperature * (current_time / total_time)
+    print('current time: ', current_time, 'current temperature: ', current_temperature, 'current jumps: ', jumps_executed, 'time step: ', t_ij)
     
-    time = np.linspace(0, TotalTime, num_steps+1)
-    return time, atoms
+    return current_time, current_temperature, lattice
 
 
 if __name__ == '__main__':
-    time, atoms = kmc_sim(TotalTime, initial_concentration, cu_thickness, al_concentration, initial_temperature, end_temperature, num_steps)
-
-    # Ergebnisse plotten
-    plt.figure(figsize=(10, 6))
-    plt.plot(time, concentration_cu, color='pink', linestyle='--', label='Cu concentration')
-    plt.axhline(y=initial_concentration * 100, color='red', linestyle='--', label='Anfangskonzentration Cu')
-    plt.title('Entwicklung der Kupferkonzentration in CuAl-Dünnschicht')
-    plt.legend()
-    plt.show()
+    # Generate CuAl grid
+    lattice =  np.zeros((grid_dim_y,grid_dim_x)) #generate_cu_al_grid(al_concentration) # 0: Cu, 1: Al
+    lattice[:grid_dim_y//2,:] = np.random.choice([0, 1], size=(grid_dim_y//2, grid_dim_x), p=[1-al_concentration, al_concentration])
+    fig, ax = plt.subplots(figsize=(6, 6))
+    ax.axis('off')
+    time = 0
+    save_list = []
+    temperature = initial_temperature
+    counter = 0
+    while temperature < end_temperature:
+        current_time, current_temperature, lattice = kmc_sim(time, total_time, temperature, end_temperature,
+                                                            lattice, num_steps)
+        time = current_time
+        temperature = current_temperature
+        counter += 1
+        if counter % 10 == 0:
+            save_list = [time, temperature, lattice]
+            lattice.tofile(f'dump/lattice_t_{time:.2f}_temp_{temperature:.2f}.bin')
+    
+    fig, axs = plt.subplots(ncols=10, figsize=(20, 2))
+    for i, time, temperature, lattice in enumerate(save_list):
+        ax.axis('off')
+        ax.set_title('t = {time} s T = {temperature}'.format(time=time, temperature=temperature))
+        sns.heatmap(lattice, cmap='Blues' , cbar=False, square=True, ax=axs[i], yticklabels=True, xticklabels=True)
