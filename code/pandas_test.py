@@ -1,10 +1,13 @@
 import pandas as pd
+al_atoms_dict = {'atom_id': [0, 1, 2, ], 
+                     'coordinates': [(0, 0), (0, 1), (1, 0), (1, 1)],
+                     'jump_sites_coordinates': [[], [(0,3)], [(2,0)], [(1,2),(2,1)] ], 
+                     'no_jump_sites': [0, 1, 1, 2] }   
+al_atoms_df = pd.DataFrame(al_atoms_dict)
 
-df = pd.DataFrame({'A': [(0,0), (0,1), (1,0), (1,1) ],
-                   'B': [[(0,3), (0,1)], [(0,3), (0,1)], [(0,0), (0,0)], [(0,0), (0,3)]],
-                   'C':[2,2,2,2]})
-print(df)
-value_to_remove = (0,4)
+def find_row_by_coordinates(df, coordinates):
+    row = df[df['coordinates'] == coordinates]
+    return row
 
 indexes_to_update = df.query['B'].apply(lambda x: value_to_remove in x).tolist() 
 print(indexes_to_update)

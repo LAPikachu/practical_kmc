@@ -58,7 +58,7 @@ def get_coordinates_atoms_type(grid, type = 1):
                 coordinates.append((i, j))
     return coordinates
 
-def get_dataframe_with_jump_rates(lattice):
+def get_dataframe_with_jump_sites(lattice):
     al_coordinates = get_coordinates_atoms_type(lattice, type=1)
     possible_jump_sites = []
     no_possible_jump_sites = []
@@ -119,7 +119,7 @@ def kmc_sim(time ,total_time, temperature, end_temperature, lattice, num_steps=1
 
     neighbor_number = 4  # for 2D
 
-    al_atoms_df = get_dataframe_with_jump_rates(lattice)
+    al_atoms_df = get_dataframe_with_jump_sites(lattice)
 
     total_possible_jump_sites = al_atoms_df['no_jump_sites'].sum()
 
@@ -127,7 +127,7 @@ def kmc_sim(time ,total_time, temperature, end_temperature, lattice, num_steps=1
 
     random_nr_1 = random.uniform(0, 1)
 
-    jumps = int(total_possible_jump_sites * random_nr_1
+    jumps = int(total_possible_jump_sites * random_nr_1)
 
     lattice, jumps = make_jumps(lattice, al_atoms_df, jumps) # first jump
     
