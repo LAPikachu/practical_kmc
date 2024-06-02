@@ -51,7 +51,25 @@ def get_type_matrix(grid):
     return values
 
 def get_updated_matrix(atom_jump_site_matrix, jump_from, jump_to):
-    pass # go through the six 8 elements that need to be updated
+    jump_from_type = atom_jump_site_matrix[jump_from[0], jump_from[1]][0]
+    jump_to_type = atom_jump_site_matrix[jump_to[0], jump_to[1]][0]
+    atom_jump_site_matrix[jump_from[0], jump_from[1]][0] = jump_to_type
+    atom_jump_site_matrix[jump_to[0], jump_to[1]][0] = jump_from_type
+    coordinates_to_update = [jump_from, jump_to]
+    directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+    for direction in directions:
+        i = jump_from[0] + direction[0]
+        j = jump_from[1] + direction[1]
+        if 0 <= i < grid_dim_y and 0 <= j < grid_dim_x:
+            if (i, j) not in coordinates_to_update:
+                coordinates_to_update.append((i, j))
+    for direction in directions:
+        i = jump_to[0] + direction[0]
+        j = jump_to[1] + direction[1]
+        if 0 <= i < grid_dim_y and 0 <= j < grid_dim_x:
+            if (i, j) not in coordinates_to_update:
+                coordinates_to_update.append((i, j))
+    pass # go through the 8 elements that need to be updated
 
 
 def make_jumps(atom_jump_site_matrix, jump_site_list, no_of_jumps):
