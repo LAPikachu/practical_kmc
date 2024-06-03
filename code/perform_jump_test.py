@@ -8,7 +8,6 @@ grid_dim_x = 5
 percent_aluminum = 0.5
 
 def generate_cu_al_grid(percent_aluminum):
-    num_aluminum_atoms = int(percent_aluminum * grid_dim_x*grid_dim_y) # percentage of aluminum atoms
     
     grid = np.zeros((grid_dim_y, grid_dim_x))
 
@@ -90,11 +89,3 @@ def make_jumps(atom_jump_site_matrix, jump_site_list, no_of_jumps):
         plt.show()
     return atom_jump_site_matrix
 
-
-atom_jump_site_matrix, jump_site_list = get_atom_jump_site_matrix(test_grid)
-
-print(jump_site_list)
-values_matrix = get_type_matrix(atom_jump_site_matrix)
-print(values_matrix)
-
-atom_jump_site_matrix = make_jumps(atom_jump_site_matrix, jump_site_list, no_of_jumps=4)
