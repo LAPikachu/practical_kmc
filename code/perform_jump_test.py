@@ -1,5 +1,7 @@
 import numpy as np
 import random
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 grid_dim_y = 10
 grid_dim_x = 5
@@ -69,26 +71,30 @@ def get_updated_matrix(atom_jump_site_matrix, jump_from, jump_to):
         if 0 <= i < grid_dim_y and 0 <= j < grid_dim_x:
             if (i, j) not in coordinates_to_update:
                 coordinates_to_update.append((i, j))
-    pass # go through the 8 elements that need to be updated
+    return atom_jump_site_matrix
 
 
 def make_jumps(atom_jump_site_matrix, jump_site_list, no_of_jumps):
     while no_of_jumps > 0:
-        jump_from = random.choice(jump_site_list, k=1)
+        jump_from = random.choice(jump_site_list)
         jump_to_list = atom_jump_site_matrix[jump_from[0], jump_from[1]][1]
-        jump_to = random.choice(jump_to_list, k=1)
+        jump_to = random.choice(jump_to_list)
         jump_site_list.remove(jump_to)
         jump_site_list.remove(jump_from)
         atom_jump_site_matrix = get_updated_matrix(atom_jump_site_matrix, jump_from, jump_to)
 
         no_of_jumps -= 1
+        type_matrix = get_type_matrix(atom_jump_site_matrix)
+        fig, ax = plt.subplots()
+        sns.heatmap(type_matrix, ax=ax)
+        plt.show()
+    return atom_jump_site_matrix
 
 
 atom_jump_site_matrix, jump_site_list = get_atom_jump_site_matrix(test_grid)
 
-
 print(jump_site_list)
-
 values_matrix = get_type_matrix(atom_jump_site_matrix)
-
 print(values_matrix)
+
+atom_jump_site_matrix = make_jumps(atom_jump_site_matrix, jump_site_list, no_of_jumps=4)
