@@ -59,7 +59,7 @@ We start with a system of possible states \(i\) and possible transitions \(i \ri
 	\begin{equation}
 		t_{ij} = - \frac{\ln(R_{2})}{\Gamma}
 	\end{equation}
-	\item update system configuration: \(i \rightarrow j\) and update time \(t = t + t_ij\)
+	\item update system configuration: \(i \rightarrow j\) and update time \(t = t + t_{ij}\)
 	\item restart loop
 
 \end{enumerate} 
@@ -101,7 +101,36 @@ and the probability from eq. \ref{eq:jump_probability} simplifies as stated belo
 	p_{ij} = \frac{\nu_{ij}}{\Gamma} = \frac{1}{n}
 \end{equation}
 
-where \(n\) is the number of jumps.
+where \(n\) is the number of jumps. In the simulation the temperature needs to be increased linear to the time - from \(293~K\) to \(600~K\). So the temperature at every time step (after incrementation according to the algorithm in section \ref{sec:general_kmc_algorithm}) is found as:
+
+\begin{equation}
+	T_{i} = T_{\mathrm{start}} + \frac{T_{\mathrm{fin}} - T_{\mathrm{start}}}{t_{i}/t_{\mathrm{total}}}
+\end{equation}
+
+where \(T_{i}\) is the current temperature at time-step \(t_{i}\), \( T_{\mathrm{start}}\) is the initial temperature, \(T_{\mathrm{fin}}\) the temperature at the end and \(t_{\mathrm{total}}\) the total time until the heating is finished. 
+Actually running the simulation exposes some additional challenges. As the size of the time-step is inversely proportional to \(\Gamma\). Meaning that the time-step at room temperature can become very large. So large indeed that it can exceed the total runtime of the simulation in the first step. To prevent this from happening the initially rejection free algorithm is updated to include the possibility of rejection. This is triggered when a certain time-step is exceeded. As the time and temperature are updated in the range of the time-step, but without performing a perturbation of the system. The second problem is the time-complexity of the simulation.  As we have to make sure that the system is updated after every move, to prevent e.g. Al atoms from switching sites with other Al-atoms. If this is checked for every jump the time complexity instantly becomes of size \(O(n^{2})\). This can be tackled, by using a data-frame storing both the atoms coordinates and their neighbors'. In the initial implementation a \code{pandas.DataFrame} was used. The random moving direction was chosen from the neighbors-list using the \code{pandas.sampel()} method. This resulted in a peculiar error - displayed in fig. \ref{fig:failed_implementation}. As all the  atoms seem to have a preferred moving direction this might expose a problem with the pseudo-randomness of the \code{pandas.sampel()} function. The tendency to choose the first moving direction (down) over the other direction shows that the the function seems not to be uniformly distributed, for the required sample size.
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width= \textwidth]{failed_implementation.png}\label{fig:failed_implementation}
+	\caption{Failed implementation of diffusion in an Cu/Cu-10\% Al-sandwich structure. The blue dots represent Al-atoms at substitutional sites. }
+\end{figure}
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width= \textwidth]{AlCu_01.png}\label{fig:Al_Cu_sandwich_time}
+	\caption{KMC-Simulation of a Cu/Cu-10\% Al-sandwich structure. The blue dots represent Al-atoms at substitutional sites. }
+\end{figure}
+
+Fig. \ref{fig:Al_Cu_sandwich_time} shows a succesful implementation utilizing a \code{numpy.array} storing the individual atoms as objects carrying the type of the atom, the index of the neighboring atoms, the index of the sites with which the atom can switch places and the the number of switches the individual atom can perform. The flattening of the concentration gradient is qualitatively visible in fig. \ref{fig:alcu_time_concentration_plot}.
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=\textwidth]{alcu_x_concentration_evolution.png}
+	\caption{x-position against concentration of al per row at evaluated different times and temperatures. }
+	\label{fig:alcu_time_concentration_plot}
+\end{figure}
+
 
 %\listoffigures
 \printbibliography
