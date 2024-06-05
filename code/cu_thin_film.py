@@ -174,8 +174,8 @@ if __name__ == '__main__':
     save_list = []
     temperature = 293.0
     counter = 0
+    atom_jump_site_matrix, jump_site_list = get_atom_jump_site_matrix(lattice)
     while temperature < end_temperature:
-        atom_jump_site_matrix, jump_site_list = get_atom_jump_site_matrix(lattice)
         current_time, current_temperature, atom_jump_site_matrix, jump_site_list = kmc_sim(time, total_time, temperature, end_temperature,
                                                             atom_jump_site_matrix, jump_site_list, num_steps)
         time = current_time
