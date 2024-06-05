@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2024.2.5)  4 JUN 2024 15:48
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2024.2.5)  6 JUN 2024 00:18
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2215,18 +2215,18 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `lmtt' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-<graphics/failed_implementation.png, id=90, 1445.4pt x 722.7pt>
+<graphics/failed_implementation.png, id=93, 1445.4pt x 722.7pt>
 File: graphics/failed_implementation.png Graphic file (type png)
 <use graphics/failed_implementation.png>
 Package pdftex.def Info: graphics/failed_implementation.png  used on input line
  115.
 (pdftex.def)             Requested size: 418.25368pt x 209.1255pt.
-<graphics/AlCu_01.png, id=92, 1445.4pt x 722.7pt>
+<graphics/AlCu_01.png, id=95, 1445.4pt x 722.7pt>
 File: graphics/AlCu_01.png Graphic file (type png)
 <use graphics/AlCu_01.png>
 Package pdftex.def Info: graphics/AlCu_01.png  used on input line 121.
 (pdftex.def)             Requested size: 418.25368pt x 209.1255pt.
-<graphics/alcu_x_concentration_evolution.png, id=95, 1084.05pt x 361.35pt>
+<graphics/alcu_x_concentration_evolution.png, id=98, 1084.05pt x 361.35pt>
 File: graphics/alcu_x_concentration_evolution.png Graphic file (type png)
 <use graphics/alcu_x_concentration_evolution.png>
 Package pdftex.def Info: graphics/alcu_x_concentration_evolution.png  used on i
@@ -2235,12 +2235,19 @@ nput line 129.
 
 [4] [5 <./graphics/failed_implementation.png> <./graphics/AlCu_01.png>]
 [6 <./graphics/alcu_x_concentration_evolution.png>]
+<graphics/alcu_x_concentration_coarse_grained.png, id=123, 1084.05pt x 361.35pt
+>
+File: graphics/alcu_x_concentration_coarse_grained.png Graphic file (type png)
+<use graphics/alcu_x_concentration_coarse_grained.png>
+Package pdftex.def Info: graphics/alcu_x_concentration_coarse_grained.png  used
+ on input line 140.
+(pdftex.def)             Requested size: 418.25368pt x 139.41516pt.
 Package microtype Info: Character `029' is missing
 (microtype)             in font `T1/lmr/m/sc/10.95'.
 (microtype)             Ignoring protrusion settings for this character.
  [7
 
-] (main.aux)
+ <./graphics/alcu_x_concentration_coarse_grained.png>] [8] (main.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
@@ -2252,13 +2259,13 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 45718 strings out of 474542
- 902525 string characters out of 5744919
- 1938978 words of memory out of 5000000
- 67132 multiletter control sequences out of 15000+600000
- 620474 words of font info for 138 fonts, out of 8000000 for 9000
+ 45743 strings out of 474542
+ 903183 string characters out of 5744919
+ 1939978 words of memory out of 5000000
+ 67144 multiletter control sequences out of 15000+600000
+ 620936 words of font info for 143 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 113i,19n,110p,11002b,2108s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 113i,20n,110p,11002b,2108s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/type1/public/mnsymbol/MnSy
 mbol10.pfb><C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/type1/public/mnsy
 mbol/MnSymbol6.pfb><C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/type1/pub
@@ -2275,9 +2282,9 @@ ic/lm/lmr8.pfb><C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/type1/public/
 lm/lmri10.pfb><C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/type1/public/l
 m/lmssbx10.pfb><C:/Users/Leon/AppData/Local/Programs/MiKTeX/fonts/type1/public/
 lm/lmtt10.pfb>
-Output written on main.pdf (8 pages, 486879 bytes).
+Output written on main.pdf (9 pages, 600386 bytes).
 PDF statistics:
- 231 PDF objects out of 1000 (max. 8388607)
- 40 named destinations out of 1000 (max. 500000)
- 33345 words of extra memory for PDF output out of 35830 (max. 10000000)
+ 248 PDF objects out of 1000 (max. 8388607)
+ 43 named destinations out of 1000 (max. 500000)
+ 33358 words of extra memory for PDF output out of 35830 (max. 10000000)
 

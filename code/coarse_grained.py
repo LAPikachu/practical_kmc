@@ -18,7 +18,7 @@ L = sample_thickness/N
 atoms_per_box = int((L/atomic_distance) * (sample_width/atomic_distance))
 
 # time parameters
-total_time = 10e6
+total_time = 1e6
 default_time_step = total_time/1000
 
 # temperature parameters
@@ -142,15 +142,15 @@ if __name__ == '__main__':
     jump_site_array = get_jump_site_array(array)
     print(array[1])
     current_time = 0
-    start_temperature = 500
+    start_temperature = 293
     temperature = start_temperature
     counter = 0
     while temperature < 600:
         array, current_time, temperature = coarse_grained_kmc(array, jump_site_array, current_time, total_time, temperature)
         counter += 1
-        if counter % 500 == 0:
+        if counter % 100 == 0:
             al_array =  [cell['Al'] for cell in array]
-            with open(f'coarse_dump/list_t_{current_time:.2f}_temp_{temperature:.2f}.txt', 'w') as f:
+            with open(f'coarse_dump_02/list_t_{current_time:.2f}_temp_{temperature:.2f}.txt', 'w') as f:
                 for item in al_array:
                     f.write(f"{item} \n") 
     print(f'steps: {counter} \n')

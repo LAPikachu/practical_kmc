@@ -34,7 +34,7 @@
 \newpage
 
 \section{Introduction}
-The Monte Carlo method broadly refers to a large toolset of modelling methods utilizing the generation random numbers to solve problems. The underlying algorithm is the Metropolis algorithm. As opposed to Molecular Dynamics Monte Carlo methods do not follow the simulated particles trajectories over, but randomly perturbed the system to asses the the resulting systems properties in comparison to the preceding system. The  \textit{Kinetic Monte Carlo} (KMC) method incorporates kinetic features to the simulation. Each transition from state to state is seen is a diffusive jump and can happen at time-scales larger than in Molecular Dynamics (which is limited by the time-scale of atomic vibrations) \cite{voter2007}. 
+The Monte Carlo method broadly refers to an extensive toolset of modeling methods that generate random numbers to solve problems. The underlying algorithm is the Metropolis algorithm. Unlike Molecular Dynamics, Monte Carlo methods do not follow the simulated particle trajectories but randomly perturb the system to assess the resulting system's properties compared to the preceding system. The  \textit{Kinetic Monte Carlo} (KMC) method incorporates kinetic features to the simulation. Each state transition is seen as a diffusive jump and can happen at time scales more extensive than in Molecular Dynamics (limited by the time-scale of atomic vibrations) \cite{voter2007}. 
 
 
 \subsection{General Algorithm of the rejection free KMC Method}\label{sec:general_kmc_algorithm}
@@ -66,7 +66,7 @@ We start with a system of possible states \(i\) and possible transitions \(i \ri
 
 \section{Diffusion Problems Solved with KMC}
 \subsection{Diffusion in a Cu thin film with time dependent diffusion rate}\label{sec:task1}
-In this task we consider a sandwich structure of a Cu film and a Cu-10\% Al film, both of thickness 100~nm. As Cu is an fcc-metal it is possible to simplify the set-up to a 2D simple cubic lattice. The diffusion coefficient is given as:
+In this task, we're examining a sandwich structure consisting of a 100~nm thick Cu film and a Cu-10\% Al film. Since Cu is a face-centered cubic (fcc) metal, we can simplify the setup to a 2D simple cubic lattice (only looking at the tilted \hkl{1 0 0}-plane). The diffusion coefficient is provided as follows:
 \begin{equation}
 	D = 1.49 \cdot 10^{-7} \exp \bigl( - \frac{136.1 \mathrm{kJ}}{\mathrm{R T}}   \bigr) \frac{\mathrm{m}^{2}}{\mathrm{s}}
 \end{equation}
@@ -108,7 +108,7 @@ where \(n\) is the number of jumps. In the simulation the temperature needs to b
 \end{equation}
 
 where \(T_{i}\) is the current temperature at time-step \(t_{i}\), \( T_{\mathrm{start}}\) is the initial temperature, \(T_{\mathrm{fin}}\) the temperature at the end and \(t_{\mathrm{total}}\) the total time until the heating is finished. 
-Actually running the simulation exposes some additional challenges. As the size of the time-step is inversely proportional to \(\Gamma\). Meaning that the time-step at room temperature can become very large. So large indeed that it can exceed the total runtime of the simulation in the first step. To prevent this from happening the initially rejection free algorithm is updated to include the possibility of rejection. This is triggered when a certain time-step is exceeded. As the time and temperature are updated in the range of the time-step, but without performing a perturbation of the system. The second problem is the time-complexity of the simulation.  As we have to make sure that the system is updated after every move, to prevent e.g. Al atoms from switching sites with other Al-atoms. If this is checked for every jump the time complexity instantly becomes of size \(O(n^{2})\). This can be tackled, by using a data-frame storing both the atoms coordinates and their neighbors'. In the initial implementation a \code{pandas.DataFrame} was used. The random moving direction was chosen from the neighbors-list using the \code{pandas.sampel()} method. This resulted in a peculiar error - displayed in fig. \ref{fig:failed_implementation}. As all the  atoms seem to have a preferred moving direction this might expose a problem with the pseudo-randomness of the \code{pandas.sampel()} function. The tendency to choose the first moving direction (down) over the other direction shows that the the function seems not to be uniformly distributed, for the required sample size.
+Running the simulation exposes some additional challenges. As the size of the time-step is inversely proportional to \(\Gamma\). This means that the time-step at room temperature can become very long. It is so large that it can exceed the total runtime of the simulation in the first step. To prevent this, the initial rejection-free algorithm is updated to include the possibility of rejection. This is triggered when a certain time-step is exceeded as the time and temperature are updated in the range of the time-step but without performing a perturbation of the system. The second problem is the time complexity of the simulation.  We must ensure that the system is updated after every move to prevent, e.g., Al atoms from switching sites with other Al-atoms. If this is checked for every jump, the time complexity instantly becomes of size \(O(n^{2})\). This can be tackled using a data frame storing the atom's coordinates and neighbors. In the initial implementation a \code{pandas.DataFrame} was used. The random moving direction was chosen from the neighbors list using the \code{pandas.sampel()} method. This resulted in a peculiar error displayed in Fig. \ref{fig:failed_implementation}. As all the atoms seem to have a preferred moving direction, this might expose a problem with the pseudo-randomness of the \code{pandas.sampel()} function. The tendency to choose the first moving direction (down) over the other direction shows that the function is not uniformly distributed for the required sample size.
 
 \begin{figure}[htb]
 	\centering
@@ -122,17 +122,25 @@ Actually running the simulation exposes some additional challenges. As the size 
 	\caption{KMC-Simulation of a Cu/Cu-10\% Al-sandwich structure. The blue dots represent Al-atoms at substitutional sites. }
 \end{figure}
 
-Fig. \ref{fig:Al_Cu_sandwich_time} shows a succesful implementation utilizing a \code{numpy.array} storing the individual atoms as objects carrying the type of the atom, the index of the neighboring atoms, the index of the sites with which the atom can switch places and the the number of switches the individual atom can perform. The flattening of the concentration gradient is qualitatively visible in fig. \ref{fig:alcu_time_concentration_plot}.
+Fig. \ref{fig:Al_Cu_sandwich_time} shows a successful implementation utilizing a \code{numpy.array} storing the individual atoms as objects carrying the type of the atom, the index of the neighboring atoms, the index of the sites with which the atom can switch places, and the number of switches the individual atom can perform. The flattening of the concentration gradient is qualitatively visible in fig. \ref{fig:alcu_time_concentration_plot}.
 
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=\textwidth]{alcu_x_concentration_evolution.png}
-	\caption{x-position against concentration of al per row at evaluated different times and temperatures. }
+	\caption{x-position against concentration of Al per row, evaluated different times and temperatures. }
 	\label{fig:alcu_time_concentration_plot}
 \end{figure}
+\FloatBarrier
 
-\section{Coarse Grained Diffusion}
-In the second task we consider the same set-up as in section \ref{sec:task1}, but with a layer thickness of \(20~\mu m \) and a heating time of \(10^{6}~s\) (10 days). As just increasing the size of the simulation box will make the method too time intensive, we need to introduce a coarse grained simulation. The idea of the following implementation is, to represent the film as a 1D-array of N entries. Each entry carries the number of atoms in a certain "box" of Length \(L\) where if \(L_{\mathrm{total}} = 20~\mathrm{nm}\) is the sample thickness \( L \) is \( L = L_{\mathrm{total}}/N \).
+\subsection{Coarse Grained Diffusion}
+In the second task, we consider the same set-up as in section \ref{sec:task1} but with a layer thickness of \(20~\mu m \) and a heating time of \(10^{6}~s\) (\(\approx\)10 days). As just increasing the simulation box size will make the method too time-intensive, we need to introduce a coarse-grained simulation. The following implementation aims to represent the film as a 1D array of N entries. Each entry carries the number of atoms in a specific "box" of Length \(L\) where if \(L_{\mathrm{total}} = 20~\mathrm{nm}\) is the sample thickness \( L \) is \( L = L_{\mathrm{total}}/N \). Running the simulation provides insights into a bug that distorts the results. This bug leads to the topmost entry in the array always becoming empty as the topmost entry is theoretically chosen equally often as the other entries - using pythons \code{random.choice} function. But as the following index can push al-atoms to the next and the previous index, whereas the first index can only move in one direction, this leads to a de-facto flow from \(i = 0\)  to \(i = 1\). This can be omitted by including a \code(continue) (where the \code{random.choice} loop is executed, without decrementing the number of jumps) statement that is executed that is executed with equal probability to pushing from \(i = 0 \) to \(i = 1\). The concentration is mapped in fig.\ref{fig:alcu_coarse_grained_plot}. The general gradient is similar to the atomic-scale simulation. In contrast, the extended resting period at the respective temperatures allows some Al-atoms to diffuse deeper into the pure Cu layer. The atomic scale simulation (see fig. \ref{fig:alcu_time_concentration_plot}) shows no trace of Al in the deeper layers. This supports the assumption that the time factor strongly influences the kinetics of the diffusion process.
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=\textwidth]{alcu_x_concentration_coarse_grained.png}
+	\caption{x-position against concentration of al per row at evaluated different times and temperatures in a coarse grained KMC-simulation of a Cu/Cu-10\% Al-sandwich structure}
+	\label{fig:alcu_coarse_grained_plot}
+\end{figure}
 
 %\listoffigures
 \printbibliography
