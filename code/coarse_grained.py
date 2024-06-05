@@ -90,27 +90,28 @@ def perfom_jump(array, index, jump_index, jump_site_array):
     array = update_indices(array, indices)
     return array, jump_site_array
 
-def make_jumps(array, jump_site_array, no_actual_jumps):
-    for i in range(no_actual_jumps):
+def make_jumps(array, jump_site_array, jumps):
+    while jumps > 0:
         random_index = int(random.choice(jump_site_array))
         if random_index == 0:
             random_direction = int(random.choice([-1, 1]))
             if random_direction == -1:
-                no_actual_jumps += 1
                 continue
             jump_index= int(random_index + 1)
             array, jump_site_array = perfom_jump(array, random_index, jump_index, jump_site_array)
+            jumps -= 1
         elif random_index == N-1:
             random_direction = int(random.choice([-1, 1]))
             if random_direction == 1:
-                no_actual_jumps += 1
                 continue
             jump_index = int(random_index-1)
             array, jump_site_array = perfom_jump(array, random_index, jump_index, jump_site_array)
+            jumps -= 1
         else:
             random_direction = int(random.choice([-1, 1]))
             jump_index = int(random_index + random_direction)
             array, jump_site_array = perfom_jump(array, random_index, jump_index, jump_site_array)
+            jumps -= 1
     return array, jump_site_array
 
 def coarse_grained_kmc(array, jump_site_array, current_time, total_time, temprature):
@@ -123,7 +124,8 @@ def coarse_grained_kmc(array, jump_site_array, current_time, total_time, temprat
 
     if current_time + t_ij < total_time:
         current_time += t_ij
-        array, jump_site_array = make_jumps(array, jump_site_array, no_actual_jumps)
+        jumps = no_actual_jumps
+        array, jump_site_array = make_jumps(array, jump_site_array, jumps)
     else:
         no_actual_jumps = 0
         current_time += default_time_step
